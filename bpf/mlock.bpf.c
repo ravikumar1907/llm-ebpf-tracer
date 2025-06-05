@@ -4,11 +4,11 @@
 
 char LICENSE[] SEC("license") = "GPL";
 
-struct mlock_event {
+struct syscall_event {
     __u32 pid;
     char comm[16];
+    char syscall[6];
 };
-
 struct {
     __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
     __uint(key_size, sizeof(__u32));
@@ -18,9 +18,10 @@ struct {
 
 SEC("tracepoint/syscalls/sys_enter_mlock")
 int trace_mlock(struct trace_event_raw_sys_enter *ctx) {
-    struct mlock_event evt = {};
+    struct syscall_event evt = {};
     evt.pid = bpf_get_current_pid_tgid() >> 32;
     bpf_get_current_comm(&evt.comm, sizeof(evt.comm));
+    __builtin_memcpy(&evt.syscall, "mlock", 5);
     bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU, &evt, sizeof(evt));
     return 0;
 }
