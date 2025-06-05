@@ -17,13 +17,13 @@ import (
 func main() {
 	objs, err := tracer.LoadBPFObjects(nil, nil)
 	if err != nil {
-		fmt.Errorf("loading BPF objects: %v", err)
+		fmt.Printf("loading BPF objects: %v", err)
 	}
 	defer objs.TraceMmap.Close()
 
 	tp, err := link.Tracepoint("syscalls", "sys_enter_mmap", objs.TraceMmap, nil)
 	if err != nil {
-		fmt.Errorf("linking tracepoint: %v", err)
+		fmt.Printf("linking tracepoint: %v", err)
 	}
 	defer tp.Close()
 
