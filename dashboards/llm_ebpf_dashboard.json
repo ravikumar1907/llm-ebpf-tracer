@@ -1,0 +1,48 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "llm-ebpf",
+    "title": "LLM Inference Tracing (eBPF)",
+    "timezone": "browser",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "mmap() Calls by Process",
+        "targets": [
+          {
+            "expr": "sum by (comm) (ebpf_mmap_count)",
+            "legendFormat": "{{comm}}",
+            "refId": "A"
+          }
+        ],
+        "datasource": "Prometheus",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        }
+      },
+      {
+        "type": "graph",
+        "title": "mlock() Events by Process",
+        "targets": [
+          {
+            "expr": "sum by (comm) (ebpf_mlock_count)",
+            "legendFormat": "{{comm}}",
+            "refId": "B"
+          }
+        ],
+        "datasource": "Prometheus",
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        }
+      }
+    ],
+    "schemaVersion": 26,
+    "version": 1
+  }
+}
