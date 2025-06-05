@@ -1,4 +1,3 @@
-# llm-ebpf-tracer
 # 🔍 LLM eBPF Tracer
 
 **Trace and analyze Large Language Model (LLM) inference workloads (e.g., PyTorch + CUDA) at the Linux kernel level using eBPF.**
@@ -33,7 +32,7 @@ Traditional profilers miss this. **eBPF (extended Berkeley Packet Filter)** allo
 
 ## 🖼️ Architecture Overview
 
-![LLM Tracing Architecture](./A_digital_illustration_presents_a_technological_ec.png)
+![LLM Tracing Architecture](./docs/llm-ebpf-tracer.png)
 
 ---
 
@@ -180,22 +179,76 @@ Useful to:
 
 ## 🚀 Getting Started
 
-### 1. Clone the Repository
+## 🧪 Getting Started: Run the LLM eBPF Tracer
+
+### ✅ Prerequisites
+
+- Linux kernel ≥ 5.8
+- `clang`, `llc`, and `bpftool` installed
+- Go ≥ 1.20
+- Root/sudo access (required to load eBPF programs)
 
 ```bash
-git clone https://github.com/yourusername/llm-ebpf-tracer.git
+sudo apt install clang llvm libelf-dev gcc make bpftool
+```
+
+---
+
+### 🔧 Build Instructions
+
+#### 1. **Clone the Repo**
+
+```bash
+git clone https://github.com/ravikumar1907/llm-ebpf-tracer
 cd llm-ebpf-tracer
 ```
 
-### 2. Run a Sample Trace (Requires Root)
+#### 2. **Build the eBPF C Programs**
 
 ```bash
-sudo bpftrace scripts/mlock.bt
+make bpf
 ```
 
-### 3. Optional: Install Prometheus + eBPF Exporter
+This should generate `.o` object files from the `bpf/*.bpf.c` sources.
 
-For live dashboards and metrics. (Coming soon.)
+---
+
+#### 3. **Run the Go Tracer**
+
+```bash
+sudo go run ./cmd/main.go
+```
+
+You should see log output like:
+
+```
+Listening for mmap events... Press Ctrl+C to stop.
+Received mmap trace event, raw bytes: [120 156 ...]
+```
+
+---
+
+### 🧪 Simulate an mmap Syscall
+
+Open another terminal and run:
+
+```bash
+python3 -c "import torch; torch.zeros((10000, 10000)).cuda()"
+```
+
+This will trigger `mmap` and possibly `mlock` + `/dev/nvidia*` accesses.
+
+You should see trace output from the eBPF tracer as those syscalls happen.
+
+---
+
+### 📈 View Metrics (Optional)
+
+If you enabled the Prometheus exporter:
+
+```bash
+curl http://localhost:2112/metrics
+```
 
 ---
 
