@@ -1,0 +1,3 @@
+tracepoint:syscalls:sys_enter_mlock {
+    @[comm, pid] = count();
+}

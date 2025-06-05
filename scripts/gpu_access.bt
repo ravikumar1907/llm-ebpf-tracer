@@ -1,0 +1,4 @@
+tracepoint:syscalls:sys_enter_openat
+/str(args->filename) =~ "/dev/nvidia.*/"/ {
+    @[comm, pid] = count();
+}

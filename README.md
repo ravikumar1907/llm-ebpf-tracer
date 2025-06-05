@@ -101,57 +101,9 @@ bpftrace -e 'tracepoint:syscalls:sys_enter_openat /str(args->filename) =~ "/dev/
 - Tune NUMA policies for large model inference
 
 ---
-
-## 🚀 Getting Started
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/llm-ebpf-tracer.git
-cd llm-ebpf-tracer
-```
-
-### 2. Run a Sample Trace (Requires Root)
-
-```bash
-sudo bpftrace scripts/mlock.bt
-```
-
-### 3. Optional: Install Prometheus + eBPF Exporter
-
-For live dashboards and metrics. (Coming soon.)
-
 ---
 
-## 🙋‍♂️ Contributions Welcome
-
-We're looking for collaborators who are into:
-
-- PyTorch, HuggingFace, or vLLM internals
-- Kernel memory and NUMA optimization
-- eBPF, tracing, and observability pipelines
-
-Open an issue, drop a PR, or just DM me on LinkedIn!
-
----
-
-## 📬 Author
-
-**Ravikumar Vallabhu**  
-Linux Kernel + AI Infra Enthusiast  
-[LinkedIn →](https://www.linkedin.com)  
-[GitHub →](https://github.com)
-
----
-
-## 📘 License
-
-MIT License — Free to use, modify, and share.
-
-
----
-
-## 🧪 Example Outputs & Use Cases
+## 🧪 Example Outputs
 
 ### 📄 mmap.bt
 
@@ -223,5 +175,53 @@ Useful to:
 - Confirm actual GPU usage
 - Identify idle or blocked GPU tasks
 - Debug multi-tenant conflicts
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/llm-ebpf-tracer.git
+cd llm-ebpf-tracer
+```
+
+### 2. Run a Sample Trace (Requires Root)
+
+```bash
+sudo bpftrace scripts/mlock.bt
+```
+
+### 3. Optional: Install Prometheus + eBPF Exporter
+
+For live dashboards and metrics. (Coming soon.)
+
+---
+
+## 🙋‍♂️ Contributions Welcome
+
+We're looking for collaborators who are into:
+
+- PyTorch, HuggingFace, or vLLM internals
+- Kernel memory and NUMA optimization
+- eBPF, tracing, and observability pipelines
+
+Open an issue, drop a PR, or just DM me on LinkedIn!
+
+---
+
+## 📬 Author
+
+**Ravikumar Vallabhu**  
+Linux Kernel + AI Infra Enthusiast  
+[LinkedIn →](https://www.linkedin.com/in/ravikumar-vallabhu-62b7518/)  
+[GitHub →](https://github.com/ravikumar1907/llm-ebpf-tracer)
+
+---
+
+## 📘 License
+
+MIT License — Free to use, modify, and share.
 
 ---

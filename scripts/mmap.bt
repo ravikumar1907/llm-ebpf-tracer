@@ -1,0 +1,3 @@
+tracepoint:syscalls:sys_enter_mmap {
+    @[comm, pid] = count();
+}

@@ -1,0 +1,3 @@
+tracepoint:sched:sched_switch {
+    @[prev_comm, next_comm] = count();
+}
