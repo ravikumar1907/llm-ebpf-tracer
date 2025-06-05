@@ -108,7 +108,11 @@ bpftrace -e 'tracepoint:syscalls:sys_enter_openat /str(args->filename) =~ "/dev/
 - Root/sudo access (required to load eBPF programs)
 
 ```bash
-sudo apt install clang llvm libelf-dev gcc make bpftool
+sudo apt update
+sudo apt install \
+  linux-headers-$(uname -r) \
+  build-essential \
+  clang llvm libelf-dev libbpf-dev
 ```
 ---
 
