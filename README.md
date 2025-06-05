@@ -147,3 +147,81 @@ Linux Kernel + AI Infra Enthusiast
 ## 📘 License
 
 MIT License — Free to use, modify, and share.
+
+
+---
+
+## 🧪 Example Outputs & Use Cases
+
+### 📄 mmap.bt
+
+#### 🔹 Output:
+```
+@[python3, 12345]: 5
+@[llm_server, 9981]: 14
+```
+
+#### 💡 What it means:
+- `python3` or `llm_server`: the process name
+- `12345`: the process ID (PID)
+- `5`, `14`: number of times the process called `mmap()`
+
+#### 🧠 Use Case:
+Model files (like `.pt`, `.bin`) are usually memory-mapped using `mmap()`. This shows which processes are mapping large files — useful for understanding cold start behavior and I/O footprint.
+
+---
+
+### 📄 mlock.bt
+
+#### 🔹 Output:
+```
+@[torchrun, 9123]: 3
+@[vllm_worker, 12077]: 6
+```
+
+#### 💡 What it means:
+- Shows how many times each process invoked `mlock()` (to lock memory pages)
+
+#### 🧠 Use Case:
+Inference engines pin memory to avoid page swapping. This helps you detect memory pinning behavior and spot excessive locked memory usage.
+
+---
+
+### 📄 sched.bt
+
+#### 🔹 Output:
+```
+@["llm_worker", "kworker"]: 102
+@["vllm_server", "python3"]: 28
+```
+
+#### 💡 What it means:
+- Represents (prev_comm, next_comm): task switch pairs
+- Shows how frequently thread switches occurred
+
+#### 🧠 Use Case:
+Reveals inference thread behavior — helpful for:
+- CPU core pinning validation
+- Detecting noisy neighbors
+- Optimizing latency
+
+---
+
+### 📄 gpu_access.bt
+
+#### 🔹 Output:
+```
+@[vllm_worker, 14321]: 4
+@[python3, 15432]: 2
+```
+
+#### 💡 What it means:
+- Tracks how often processes accessed GPU-related device files like `/dev/nvidia0`
+
+#### 🧠 Use Case:
+Useful to:
+- Confirm actual GPU usage
+- Identify idle or blocked GPU tasks
+- Debug multi-tenant conflicts
+
+---
