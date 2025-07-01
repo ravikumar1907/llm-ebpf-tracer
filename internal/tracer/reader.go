@@ -37,11 +37,11 @@ func ReadEvents(eventsMap *ebpf.Map) error {
 			continue
 		}
 
-		syscall := strings.TrimRight(string(evt.Syscall[:]), "\x00")
 		comm := strings.TrimRight(string(evt.Comm[:]), "\x00")
-		fmt.Printf("%s: PID=%d, Comm=%s\n", syscall, evt.Pid, comm)
+		filename := strings.TrimRight(string(evt.Filename[:]), "\x00")
+		fmt.Printf("openat: PID=%d, Comm=%s, Flags=0x%x, Mode=0%o, Retval=%d, Filename=%s\n",
+			evt.Pid, comm, evt.Flags, evt.Mode, evt.Retval, filename)
 
-		api.Increment(syscall, evt.Comm)
-
+		api.Increment("openat", evt.Comm)
 	}
 }

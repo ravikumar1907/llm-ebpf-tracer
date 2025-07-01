@@ -20,6 +20,7 @@ func main() {
 		fmt.Printf("loading BPF objects: %v", err)
 	}
 	defer objs.TraceMmap.Close()
+	defer objs.TraceOpen.Close()
 
 	tp, err := link.Tracepoint("syscalls", "sys_enter_mmap", objs.TraceMmap, nil)
 	if err != nil {
@@ -27,13 +28,26 @@ func main() {
 	}
 	defer tp.Close()
 
-	log.Println("BPF program loaded and tracepoint linked successfully.")
+	// Attach kprobe and kretprobe for openat2
+	kp, err := link.Kprobe("do_sys_openat2", objs.TraceOpen, nil)
+	if err != nil {
+		fmt.Printf("linking kprobe: %v", err)
+	}
+	defer kp.Close()
+
+	krp, err := link.Kretprobe("do_sys_openat2", objs.TraceOpen, nil)
+	if err != nil {
+		fmt.Printf("linking kretprobe: %v", err)
+	}
+	defer krp.Close()
+
+	log.Println("BPF programs loaded and tracepoint/kprobes linked successfully.")
 
 	go tracer.ReadEvents(objs.Events)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	fmt.Println("Listening for mmap events... Press Ctrl+C to stop.")
+	fmt.Println("Listening for mmap and openat events... Press Ctrl+C to stop.")
 	<-ctx.Done()
 }

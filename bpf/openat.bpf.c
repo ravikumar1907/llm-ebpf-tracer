@@ -20,6 +20,13 @@ struct {
     __uint(value_size, sizeof(__u32));
 } events SEC(".maps");
 
+struct {
+    __uint(type, BPF_MAP_TYPE_HASH);
+    __uint(key_size, sizeof(__u32));
+    __uint(value_size, sizeof(struct syscall_event));
+    __uint(max_entries, 1024);
+} start_events SEC(".maps");
+
 // Kprobe: enter openat2
 SEC("kprobe/do_sys_openat2")
 int BPF_KPROBE(do_sys_openat2, int dfd, const char *filename, struct open_how *how) {
